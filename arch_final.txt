@@ -2,6 +2,7 @@
 loadkeys dvorak
 ip a
 wifi-menu
+ping 8.8.8.8
 timedatectl set-ntp true
 pacman -Syyy
 pacman -S reflector
