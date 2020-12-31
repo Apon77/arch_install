@@ -1,18 +1,25 @@
 #! /bin/bash
+
+#keyboard layout
 loadkeys dvorak
 ip a
+
+#connect wifi
 iwctl
 #station device connect SSID (new arch)
 station wls3 connect TP-LINK
-
 #wifi-menu (old arch)
 ping 8.8.8.8
+
+#update repos
 timedatectl set-ntp true
 pacman -Syyy
 pacman -S reflector
 reflector -c Bangladesh -c India -a 6 --sort rate --save /etc/pacman.d/mirrorlist
 #update python if reflector shows errors
 pacman -Syyy
+
+#partitioning
 lsblk
 cfdisk /dev/sda
 #(create root partition, no need to create efi partion for dual boot)
@@ -26,7 +33,7 @@ mount /dev/sda* /mnt/Windows10 #replace * with windows 10 c drive number
 #mkdir /mnt/Other_drive #make other drive accesable
 #mount /dev/sdb* /mnt/Other_drive #replace * with drive number
 lsblk #check if everything ok or not
-pacstrap /mnt base linux linux-firmware nano intel-ucode
+pacstrap /mnt base linux linux-firmware vim intel-ucode
 genfstab -U /mnt >> /mnt/etc/fstab
 cat /mnt/etc/fstab
 arch-chroot /mnt
@@ -42,9 +49,10 @@ echo "
 ::1		localhost
 127.0.1.1	K" >> /etc/hosts
 passwd
-pacman -S grub efibootmgr os-prober ntfs-3g networkmanager network-manager-applet wireless_tools wpa_supplicant dialog base-devel linux-headers
+pacman -S grub os-prober ntfs-3g networkmanager network-manager-applet wireless_tools wpa_supplicant base-devel linux-headers
 
 #uefi
+pacman -S efibootmgr
 grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
 #or, bios/mbr and not /dev/sda1
 grub-install --target=i386-pc /dev/sda 
@@ -74,7 +82,7 @@ sudo pacman -S sddm
 sudo systemctl enable sddm
 
 #xfce4 installation
-sudo pacman -S xfce4 networkmanager
+sudo pacman -S xfce4
 
 #or, kde installation
 sudo pacman -S plasma kde-applications packagekit-qt5
