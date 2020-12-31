@@ -1,12 +1,17 @@
 #! /bin/bash
 loadkeys dvorak
 ip a
-wifi-menu
+iwctl
+#station device connect SSID (new arch)
+station wls3 connect TP-LINK
+
+#wifi-menu (old arch)
 ping 8.8.8.8
 timedatectl set-ntp true
 pacman -Syyy
 pacman -S reflector
 reflector -c Bangladesh -c India -a 6 --sort rate --save /etc/pacman.d/mirrorlist
+#update python if reflector shows errors
 pacman -Syyy
 lsblk
 cfdisk /dev/sda
@@ -37,14 +42,19 @@ echo "
 ::1		localhost
 127.0.1.1	K" >> /etc/hosts
 passwd
-pacman -S grub efibootmgr os-prober ntfs-3g networkmanager network-manager-applet wireless_tools wpa_supplicant dialog base-devel linux-headers git
+pacman -S grub efibootmgr os-prober ntfs-3g networkmanager network-manager-applet wireless_tools wpa_supplicant dialog base-devel linux-headers
+
+#uefi
 grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
+#or, bios/mbr and not /dev/sda1
+grub-install --target=i386-pc /dev/sda 
+
 grub-mkconfig -o /boot/grub/grub.cfg
 systemctl enable NetworkManager
 useradd -mG wheel k
 passwd k
 #next Uncomment %wheel ALL=(ALL) ALL before #same thing without a password
-EDITOR=nano visudo
+EDITOR=vim visudo
 exit
 umount -a
 reboot
@@ -54,15 +64,31 @@ nmtui
 #sudo pacman -S xf86-video-qxl #for virtualbox
 sudo pacman -S xf86-video-intel
 sudo pacman -S xorg
-#kde installation
+
+#lightdm installation
+sudo pacman -S lightdm-gtk-greeter
+sudo systemctl enable lightdm
+
+#or, sddm installation
 sudo pacman -S sddm
 sudo systemctl enable sddm
+
+#xfce4 installation
+sudo pacman -S xfce4 networkmanager
+
+#or, kde installation
 sudo pacman -S plasma kde-applications packagekit-qt5
+
 #install yay
+sudo pacman -S git
 git clone https://aur.archlinux.org/yay.git
 cd yay/
 makepkg -si PKGBUILD
-#install ms fonts
+
+#install noto fonts (has bangla font too)
+sudo pacman -S noto-fonts
+
+#or, install ms fonts
 yay -S ttf-ms-fonts
 exit
 reboot
