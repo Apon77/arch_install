@@ -93,7 +93,11 @@ git clone https://aur.archlinux.org/yay.git
 cd yay/
 makepkg -si PKGBUILD
 
-#install noto fonts (has bangla font too)
+#install only bangla font
+mkdir -p ~/.fonts
+curl -L https://www.omicronlab.com/download/fonts/Siyamrupali.ttf -o ~/.fonts/Siyamrupali.ttf
+
+#or, install noto fonts (has bangla font too)
 sudo pacman -S noto-fonts
 
 #or, install ms fonts
