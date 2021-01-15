@@ -102,5 +102,11 @@ sudo pacman -S noto-fonts
 
 #or, install ms fonts
 yay -S ttf-ms-fonts
+
+# audio
+sudo pacman -S alsa-utils
+alsamixer
+speaker-test -c2 #(after reboot)
+
 exit
 reboot
